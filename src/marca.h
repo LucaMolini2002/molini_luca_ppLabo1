@@ -8,7 +8,7 @@
 #ifndef MARCA_H_
 #define MARCA_H_
 
-#define QTY_MARCAS 5
+#define QTY_MARCAS 4
 
 typedef struct{
 	int id;

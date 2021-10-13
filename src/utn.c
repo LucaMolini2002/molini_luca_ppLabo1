@@ -13,17 +13,21 @@
 int menu(){
 	int opcion;
 
-	printf("     ~ Menu de opciones ~    \n "
-			"Elija una opcion: \n"
-			"1-Alta avion \n"
-			"2-Modificar avion \n"
-			"3-Baja avion \n"
-			"4-Listar aviones \n"
-			"5-Listar viajes \n"
-			"6-Listar marcas \n"
-			"7- Salir \n");
+	printf(" ~ Menu de opciones ~  \n"
+		   "1- Alta avion \n"
+		   "2- Modificar avion \n"
+		   "3- Baja avion \n"
+		   "4- Listar aviones \n"
+		   "5- Listar viajes \n"
+		   "6- Listar marcas \n"
+		   "7- Mostrar todos los aviones Boening \n"
+		   "8- Mostrar aviones de una marca selecionada \n"
+		   "9- Mostrar la matricula y marca de los aviones que viajaron a Neuquen \n"
+		  "10- Informar km totales recorridos por los aviones marca ATR \n"
+		  "11- Informar la cantidad total de asientos para un modelo de avión seleccionado. \n"
+		  "12- Salir \n");
 
-	scanf("%d",&opcion);
+	utn_getNumero( &opcion, "Ingrese una opcion: \n", "Error, ingrese una opcion valida \n", 1, 12, 3);
 	return opcion;
 }
 

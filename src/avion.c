@@ -36,29 +36,52 @@ int initAvion(Avion* array, int len){
 /*
  * *\brief harcodea avion
  *  \param avion
- *  \return void
+ *  \return int contador retorna cantidad de aviones, para asi saber el  ultimo id usado
  */
 int harcodearAviones(Avion* array){
 	int contador=0;
 
-	Avion empleados[] =
+	Avion aviones[] =
 	{
+			{1,"ASD123","01/01/2002",101,1001,2002,500,0},
+			{2,"QWE234","02/01/2002",102,1002,2007,700,0},
+			{3,"FJK438","03/01/2002",104,1001,2002,900,0},
+			{4,"HGJ432","04/01/2002",100,1003,2005,200,0},
+			{5,"NFI912","05/01/2002",103,1000,1999,300,0},
+			{6,"ELR594","06/01/2002",103,1000,2002,500,0},
+			{7,"KOW239","07/01/2002",101,1002,2000,700,0},
+			{8,"POP232","08/01/2002",100,1002,2004,900,0},
+			{9,"KKJ013","09/01/2002",103,1003,2011,200,0},
+		   {10,"LDS423","10/01/2002",101,1000,2003,600,0}
+
+
+			/*{1,"a","01/01/2002",101,1001,2002,500,0},
+			{2,"a","02/01/2002",102,1002,2007,700,0},
+			{3,"a","03/01/2002",104,1001,2002,900,0},
+			{4,"a","04/01/2002",100,1003,2005,200,0},
+			{5,"a","05/01/2002",103,1000,1999,300,0},
+			{6,"a","06/01/2002",103,1000,2002,500,0},
+			{7,"a","07/01/2002",101,1002,2000,700,0},
+			{8,"a","08/01/2002",100,1002,2004,900,0},
+			{9,"a","09/01/2002",103,1003,2011,200,0},
+			{10,"a","10/01/2002",101,1000,1996,300,0},
+			*/
 	};
 
-	for(int i=0;i<5;i++){
-		array[i]=empleados[i];
+	for(int i=0;i<10;i++){
+		array[i]=aviones[i];
 		contador++;
 	}
 	return contador;
 }
 /*
- *  \brief da de alta un acion
- *  \param eEmpleados* array
+ *  \brief da de alta un avion
+ *  \param Avion array  array de aviones
  *  \param int len longitud del array
- *  \param int* id puntero al id del empleado
+ *  \param int* id en el que se guardara el id del avion ingresado
  *  \return -1 si hay error y 0 si esta bien
  */
-int altaAvion(Avion* array, int len,int* id){
+int altaAvion(Avion* array, int len, int* id, Marca* aMarca, Viaje* aViaje){
 	int retorno=-1;
 	Avion buffer;
 	int auxIndexAvion;
@@ -70,12 +93,14 @@ int altaAvion(Avion* array, int len,int* id){
 		{
 			printf("Ingrese matricula:");
 			getString(buffer.matricula, 10);
-			printf("Ingrese Fecha dd/mm/aaa: ");
+			printf("Ingrese Fecha dd/mm/aaaa: ");
 			getString(buffer.fecha, 15);
-			utn_getNumero(&buffer.modelo,  "Ingrese modelo: (año de fabricacion)", "Error, ingrese nuevamente el modelo", 1900, 2022, 2);
- 			utn_getNumero(&buffer.idMarca, "Ingrese el numero correspondiente a su marca: 1000- Boening\n1001- Airbus\n1002- ATR\n1003- Bombardier", "Error, ingrese nuevamente la marca", 1000, 1003, 2);
-			utn_getNumero(&buffer.idViaje, "Ingrese el numero correspondiente a su viaje: \n100-Salta\n101-Tucuman\n102-Neuquen\n103-Corrientes\n104-Chubut", "Error, vuelva a intentarlo", 100, 104, 2);
-			utn_getNumero(&buffer.cantAsientos, "Ingrese la cantidad de asientos del avion","Error, ingrese una cantidad valida", 1, 5000, 2);
+			utn_getNumero(&buffer.modelo, "Ingrese modelo: (año de fabricacion)", "Error, ingrese nuevamente el modelo\n", 1900, 2022, 2);
+			mostrarMarcas(aMarca, 4);
+ 			utn_getNumero(&buffer.idMarca,"Ingrese el ID correspondiente a su marca:\n", "Error, vuelva a intentarlo\n", 1000, 1003, 2);
+			mostrarViajes(aViaje, 5);
+ 			utn_getNumero(&buffer.idViaje,"Ingrese el Id correspondiente a su viaje:\n", "Error, vuelva a intentarlo\n", 100, 104, 2);
+			utn_getNumero(&buffer.cantAsientos,"Ingrese la cantidad de asientos del avion","Error, ingrese una cantidad valida\n", 1, 5000, 2);
 
 			retorno=0;
 			buffer.idAvion= *id;
@@ -84,16 +109,17 @@ int altaAvion(Avion* array, int len,int* id){
 			(*id)++;
 			printf("Los datos se cargaron con exito.\n");
 		}
+		else
+		{
+			printf("\nNo hay mas espacios disponibles.\n");
+		}
 	}
-	else
-	{
-		printf("No hay mas espacios disponibles.\n");
-	}
+
 	return retorno;
 }
 /*
  *  \brief busca un avion por id
- *  \param Avion* list
+ *  \param Avion* list array avion
  *  \param int len longitud del array
  *  \param int id legajo del avion
  *  \return -1 si hay error o i, con el id del avion buscado
@@ -111,13 +137,17 @@ int findAvionByMatricula(Avion* list, int len, char* matricula)
 				retorno=i;
 				break;
 			}
+			else
+			{
+				retorno=-2;
+			}
 		}
 	}
 	return retorno;
 }
 /*
  *  \brief busca un avion vacio
- *  \param Avion* list
+ *  \param Avion* list array de avion
  *  \param int len longitud del array
  *  \return -1 si hay error o i, con el id del avion buscado
  */
@@ -141,9 +171,9 @@ int getEmptyIndex(Avion* array,int len)
 }
 /*
  *  \brief da de baja un avion
- *  \param Avion* list
+ *  \param Avion* list array avion
  *  \param int len longitud del array
- *  \param int id legajo del avion
+ *  \param int id legajo del avion a dar de baja
  *  \return -1 si hay error o 0 si salio bien
  */
 int bajaAvion(Avion* array, int len, int id)
@@ -175,9 +205,9 @@ int bajaAvion(Avion* array, int len, int id)
 }
 /*
  *  \brief modifica un avion
- *  \param Avion* list
- *  \param int len longitud del array
- *  \param int indice indice del array avion
+ *  \param Avion* list array de aviones
+ *  \param int len longitud del array aviones
+ *  \param int indice indice del array avion a modificar
  *  \return -1 si hay error o 0 si salio bien
  */
 int modificarAvion(Avion* array,int len, int index)
@@ -199,20 +229,29 @@ int modificarAvion(Avion* array,int len, int index)
 			scanf("%c", &charOpcion);
 			if(charOpcion == 's')
 			{
-				utn_getNumero(&opcion, "Que desea cambiar?", "Error, elija una opcion valida", 1, 2, 2);
+				utn_getNumero(&opcion, "Elija una opcion: \n"
+									   "1- Cambiar modelo \n"
+									   "2- Cambiar cantidad de asientos \n"
+									   "3- Cambiar modelo y cantidad de asientos \n", "Error, elija una opcion valida", 1, 3, 2);
 				switch(opcion){
 				case 1:
-					utn_getNumero(&buffer.modelo, "Ingrese modelo: (año de fabricacion)", "Error, ingrese nuevamente el modelo", 1900, 2022, 2);
+					utn_getNumero(&buffer.modelo, "Ingrese modelo: (año de fabricacion)", "Error, ingrese nuevamente el modelo\n", 1900, 2022, 2);
+					array[index].modelo=buffer.modelo;
 					break;
 				case 2:
-					utn_getNumero(&buffer.idViaje, "Ingrese la cantidad de asientos del avion","Error, ingrese una cantidad valida", 1, 5000, 2);
+					utn_getNumero(&buffer.cantAsientos, "Ingrese la cantidad de asientos del avion","Error, ingrese una cantidad valida\n", 1, 5000, 2);
+					array[index].cantAsientos=buffer.cantAsientos;
+					break;
+				case 3:
+					utn_getNumero(&buffer.modelo, "Ingrese modelo: (año de fabricacion)", "Error, ingrese nuevamente el modelo\n", 1900, 2022, 2);
+					array[index].modelo=buffer.modelo;
+					utn_getNumero(&buffer.cantAsientos, "Ingrese la cantidad de asientos del avion","Error, ingrese una cantidad valida\n", 1, 5000, 2);
+					array[index].cantAsientos=buffer.cantAsientos;
 					break;
 				}
 
 				retorno=1;
-				buffer.idAvion=array[index].idAvion;
-				buffer.isEmpty=0;
-				array[index]=buffer;
+
 				printf("El avion se modifico con exito! ");
 			}
 			else if(charOpcion == 'n')
@@ -230,39 +269,32 @@ int modificarAvion(Avion* array,int len, int index)
 }
 /*
  *  \brief muestra un avion
+ *  \param Avion aAviones
  *  \param char* descMarca
  *  \param char* descViaje
- *  \return 0 si hay error o 1 si salio bien
+ *  \return -1 si hay error o 0 si salio bien
  */
-int mostrarAvion(Avion* aAviones, char* descMarca, char* descViaje){
+void mostrarAvion(Avion aAviones, char* descMarca, char* descViaje){
 
-	int retorno=0;
-	if(aAviones != NULL && aAviones->isEmpty == 0)
-	{
-		retorno=1;
-		printf("\n %d  %s %s %s  %s  %d  %d \n",
-				aAviones->idAvion,
-				aAviones->matricula,
-				aAviones->fecha,
-				descViaje,
-				descMarca,
-				aAviones->modelo,
-				aAviones->cantAsientos);
-	}
-
-	return retorno;
+	printf("|  %-5d |  %-9s| %s | %-10s |  %-10s |    %-9d|       %d          |\n",
+			aAviones.idAvion,
+			aAviones.matricula,
+			aAviones.fecha,
+			descViaje,
+			descMarca,
+			aAviones.modelo,
+			aAviones.cantAsientos);
 }
-
 
 /*
  *  \brief muestra todos los aviones
- *  \param Avion* aAviones
- *  \param int len
- *  \param Marca* aMarca
- *  \param int lenMarca
- *  \param Viaje* aViaje
- *  \param int lenViaje
- *  \return 0 si hay error o 1 si salio bien
+ *  \param Avion* aAviones array de tipo avion
+ *  \param int len longitud del array aviones
+ *  \param Marca* aMarca array de tipo marca
+ *  \param int lenMarca longitud del array marca
+ *  \param Viaje* aViaje array de tipo viaje
+ *  \param int lenViaje longitud del array viaje
+ *  \return -1 si hay error o 0 si salio bien
  */
 int mostrarAviones(Avion aAviones[], int len, Marca aMarca[], int lenMarca, Viaje aViaje[], int lenViaje)
 {
@@ -273,24 +305,28 @@ int mostrarAviones(Avion aAviones[], int len, Marca aMarca[], int lenMarca, Viaj
 
 	if(aAviones != NULL && len > 0 )
 	{
-		printf("\nID  Matricula  Fecha  Viaje  Marca  Modelo CantidadDeAsientos");
+		printf("\n-------------------------------------------------------------------------------------------------\n");
+
+		printf("|  ID    | Matricula |   Fecha    |  Viaje     |   Marca     |   Modelo    | CantidadDeAsientos |\n");
+		printf("-------------------------------------------------------------------------------------------------\n");
 		retorno=0;
 		for(i=0;i<len;i++)
 		{
 			getDescripcionMarca(aMarca, lenMarca, aAviones[i].idMarca, descripcionMarca);
 			getDescripcionViaje(aViaje, lenViaje, aAviones[i].idViaje, descripcionVaje);
-			mostrarAvion(&aAviones[i], descripcionMarca, descripcionVaje);
+			mostrarAvion(aAviones[i], descripcionMarca, descripcionVaje);
 		}
+		printf("-------------------------------------------------------------------------------------------------\n");
 	}
 	return retorno;
 }
 
 /*
- *  \brief Obtiene una desripcion segun el id
- *  \param Marca* arrayMarca[]
+ *  \brief Obtiene una descripcion segun el id
+ *  \param Marca* arrayMarca[] array del tipo marca
  *  \param int tamMarca longitud del array
  *  \param int buscar id a buscar
- *  \param char* descDepto donde se guardara la descripcion obtenida
+ *  \param char* descMarca donde se guardara la descripcion obtenida
  *  \return void
  */
 static void getDescripcionMarca(Marca arrayMarca[], int tamMarca, int buscar, char* descMarca){
@@ -304,11 +340,11 @@ static void getDescripcionMarca(Marca arrayMarca[], int tamMarca, int buscar, ch
 	}
 }
 /*
- *  \brief Obtiene una desripcion segun el id
- *  \param Viaje* arrayViaje[]
+ *  \brief Obtiene una descripcion segun el id
+ *  \param Viaje* arrayViaje[] array de la escructura viaje
  *  \param int tamViaje longitud del array
- *  \param int buscar id a buscar
- *  \param char* descDepto donde se guardara la descripcion obtenida
+ *  \param int buscar id a buscar id a buscar
+ *  \param char* descViaje donde se guardara la descripcion obtenida
  *  \return void
  */
 static void getDescripcionViaje(Viaje arrayViaje[], int tamViaje, int buscar, char* descViaje){
@@ -321,21 +357,24 @@ static void getDescripcionViaje(Viaje arrayViaje[], int tamViaje, int buscar, ch
 		}
 	}
 }
+
 /*
- *  \brief ordena los empleados por matricula y marca
- *  \param Avion* list
- *  \param int len longitud del array
- *  \param Marca* aMarca[]
- *  \param lenDepto longitud del array depto
+ *  \brief ordena los aviones por matricula y marca
+ *  \param Avion* list array de aviones
+ *  \param int len longitud del array avion
+ *  \param Marca* aMarca[] array de marca
+ *  \param int lenMarca longitud del array marca
  *  \return -1 si hay error o 0 si salio bien
  */
-int sortAvionesPorMatricula(Avion* list, int len, Marca* aMarca)
+int sortAvionesPorMatriculayMarca(Avion* list, int len, Marca* aMarca, int lenMarca)
 {
 	int retorno=-1;
 	int flagSwap;
 	int i;
+	char descripcionMarca[20];
+	char descripcionMarcaSiguiente[20];
 	Avion bufferEntidad;
-	if(list!=NULL && len>0)
+	if(list!=NULL && len>0 )
 	{
 		retorno=0;
 		do{
@@ -346,16 +385,18 @@ int sortAvionesPorMatricula(Avion* list, int len, Marca* aMarca)
 				{
 					continue;
 				}
-				if(strncmp(list[i].matricula,list[i+1].matricula,51)>0)
+				if(strncmp(list[i].matricula,list[i+1].matricula,21)>0)
 				{
 					flagSwap=1;
 					bufferEntidad=list[i];
 					list[i]=list[i+1];
 					list[i+1]=bufferEntidad;
 				}
-				else if(strncmp(list[i].matricula,list[i+1].matricula,51)==0)
+				if(strncmp(list[i].matricula,list[i+1].matricula,21)==0)
 				{
-					if(strncmp(aMarca[i].descripcion,aMarca[i+1].descripcion,51)>0)
+					getDescripcionMarca(aMarca, lenMarca, list[i].idMarca, descripcionMarca);
+					getDescripcionMarca(aMarca, lenMarca, list[i+1].idMarca, descripcionMarcaSiguiente);
+					if(strncmp(descripcionMarca,descripcionMarcaSiguiente,41)>0)
 					{
 						flagSwap=1;
 						bufferEntidad=list[i];
@@ -364,10 +405,112 @@ int sortAvionesPorMatricula(Avion* list, int len, Marca* aMarca)
 					}
 				}
 			}
-			len--;
 		}while(flagSwap);
-		printf("Aviones ordenados con exito!");
 	}
 	return retorno;
+}
+
+void mostrarAvionesBoening(Avion* aAviones, int lenAviones, Marca* aMarcas, int lenMarcas, Viaje* aViajes, int lenViajes){
+
+	char descMarca[20];
+	char descViaje[20];
+	if(aAviones!=NULL && lenAviones>=0)
+	{
+		printf("\n-------------------------------------------------------------------------------------------------\n");
+
+		printf("|  ID    | Matricula |   Fecha    |  Viaje     |   Marca     |   Modelo    | CantidadDeAsientos |\n");
+		printf("-------------------------------------------------------------------------------------------------\n");
+		for(int i=0;i<lenAviones;i++)
+		{
+			if(aAviones[i].idMarca == 1000 && aAviones[i].isEmpty == 0)
+			{
+		    	getDescripcionMarca(aMarcas, lenMarcas, aAviones[i].idMarca, descMarca);
+		    	getDescripcionViaje(aViajes, lenViajes, aAviones[i].idViaje, descViaje);
+				mostrarAvion(aAviones[i], descMarca, descViaje);
+			}
+		}
+		printf("-------------------------------------------------------------------------------------------------\n");
+	}
+}
+
+void mostrarAvionMarcaSelec(Avion* aAviones, int lenAviones, Marca* aMarcas, int lenMarcas, Viaje* aViajes, int lenViajes){
+
+    int idMarca;
+	char descMarca[20];
+	char descViaje[20];
+    printf("*** Avion de una marca ***\n\n");
+
+    mostrarMarcas(aMarcas,lenMarcas);
+    utn_getNumero(&idMarca, "Seleccione una ID:", "Error, ID invalida", 1000, 1003, 3);
+
+	printf("\n-------------------------------------------------------------------------------------------------\n");
+
+	printf("|  ID    | Matricula |   Fecha    |  Viaje     |   Marca     |   Modelo    | CantidadDeAsientos |\n");
+	printf("-------------------------------------------------------------------------------------------------\n");
+    for(int i = 0; i < lenAviones; i++)
+    {
+        if(aAviones[i].idMarca == idMarca && aAviones[i].isEmpty == 0){
+        	getDescripcionMarca(aMarcas, lenMarcas, aAviones[i].idMarca, descMarca);
+        	getDescripcionViaje(aViajes, lenViajes, aAviones[i].idViaje, descViaje);
+        	mostrarAvion(aAviones[i], descMarca, descViaje);
+        }
+    }
+    printf("-------------------------------------------------------------------------------------------------\n");
+}
+
+void mostrarMatriculayMarca(Avion avion, char* descMarca){
+	printf("| %s    | %s    |",avion.matricula,descMarca);
+}
+
+void mostrarAvionesNeuquen(Avion* aAviones, int lenAviones, Marca* aMarcas, int lenMarcas, Viaje* aViajes, int lenViajes){
+
+	char descMarca[20];
+	if(aAviones!=NULL && lenAviones>=0)
+	{
+		printf("-----------------------\n");
+
+		printf("| Matricula | Marcas |\n");
+		printf("-----------------------\n");
+		for(int i=0;i<lenAviones;i++)
+		{
+			if(aAviones[i].idViaje == 102 && aAviones[i].isEmpty == 0)
+			{
+		    	getDescripcionMarca(aMarcas, lenMarcas, aAviones[i].idMarca, descMarca);
+				mostrarMatriculayMarca(aAviones[i], descMarca);
+			}
+		}
+		printf("\n-----------------------\n");
+	}
+}
+
+void informarKmsMarcaATR(Avion* aAviones, int lenAviones, Marca* aMarcas, int lenMarcas, Viaje* aViajes, int lenViajes){
+	//int acumKm=0;
+	if(aAviones!=NULL && lenAviones>=0)
+	{
+		for(int i=0;i<lenAviones;i++)
+		{
+			if(aAviones[i].idMarca == 1002 && aAviones[i].isEmpty == 0)
+			{
+				//acumKm = acumKm + aAviones->
+			}
+		}
+	}
+}
+
+void informarAsientosModeloSelec(Avion* aAviones, int lenAviones, Marca* aMarcas, int lenMarcas, Viaje* aViajes, int lenViajes){
+
+    int modelo;
+	int acumAsientos;
+
+    mostrarAviones(aAviones, lenAviones, aMarcas, lenMarcas, aViajes, lenViajes);
+    utn_getNumero(&modelo, "Ingrese un modelo:", "Error, modelo invalida", 1900, 2022, 3);
+
+    for(int i = 0; i < lenAviones; i++)
+    {
+        if(aAviones[i].modelo == modelo && aAviones[i].isEmpty == 0){
+        	acumAsientos = acumAsientos + aAviones[i].cantAsientos;
+        }
+    }
+    printf("La marca seleccionada tiene un total de %d asientos.",acumAsientos);
 }
 

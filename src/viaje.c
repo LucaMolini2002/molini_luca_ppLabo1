@@ -10,17 +10,29 @@
 #include <string.h>
 #include "viaje.h"
 
+/*
+ * \brief muestra un viaje
+ * \param Viaje* viajes array de viajes
+ * \return void
+ */
 void mostrarViaje (Viaje* viajes){
 	if(viajes!=NULL && viajes->isEmpty==0)
 	{
-		printf("  %d      %10s\n", viajes->idViaje, viajes->descripcion);
+		printf("| %d  | %-10s |\n", viajes->idViaje, viajes->descripcion);
 	}
 }
-
+/*
+ * \brief muestra todos los viajes
+ * \param Viaje* viajes array de viajes
+ * \param int tam longitud del array viajes
+ * \return void
+ */
 void mostrarViajes (Viaje viajes[], int tam){
-    printf(" Id         Marca\n\n");
+    printf("---------------------\n");
+    printf("| ID   |   Viaje    |\n");
+    printf("---------------------\n");
     for(int i=0; i < tam; i++){
         mostrarViaje(&viajes[i]);
     }
-    printf("\n");
+    printf("---------------------\n");
 }

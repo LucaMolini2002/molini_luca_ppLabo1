@@ -9,18 +9,31 @@
 #include <string.h>
 #include "marca.h"
 
-void mostrarMarca (Marca* marcas){
+
+/*
+ * \brief muestra una marca
+ * \param Marca* marcas array de marca
+ * \return void
+ */
+void mostrarMarca(Marca* marcas){
 	if(marcas!=NULL && marcas->isEmpty==0)
 	{
-		printf("  %d      %10s\n", marcas->id, marcas->descripcion);
+		printf("|%d  |  %-10s |\n", marcas->id, marcas->descripcion);
 	}
 }
-
+/*
+ * \brief muestra todas las marcas
+ * \param Marca marcas[] array de marca
+ * \param int tam longitud del array marca
+ * \return void
+ */
 void mostrarMarcas (Marca marcas[], int tam){
-    printf(" Id         Marca\n\n");
+    printf("----------------------\n");
+    printf("| ID   |    Marca    |\n");
+    printf("----------------------\n");
     for(int i=0; i < tam; i++){
-        mostrarMarca(&marcas[i]);
+    	mostrarMarca(&marcas[i]);
     }
-    printf("\n");
+    printf("----------------------\n");
 }
 

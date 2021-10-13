@@ -44,45 +44,75 @@ int main(void) {
 
 	if(initAvion(aviones, QTY_AVIONES)==1){
 		opcion = menu();
-		//idAviones = idAviones+harcodearAviones(aviones);
+		int contador;
+		contador = harcodearAviones(aviones);
+		idAviones = idAviones+contador;
 	}
 
 	do{
 		switch(opcion)
 		{
 		case 1:
-			altaAvion(aviones, QTY_AVIONES, &idAviones);
+			altaAvion(aviones, QTY_AVIONES, &idAviones, marcas, viajes);
 			break;
 		case 2:
+			mostrarAviones(aviones, QTY_AVIONES, marcas, QTY_MARCAS, viajes, QTY_VIAJES);
 			printf("Ingrese matricula del avion a modificar:");
 			getString(auxMatricula, 10);
+			while(findAvionByMatricula(aviones, QTY_AVIONES, auxMatricula)==-2)
+			{
+				printf("\nLa matricula ingresada no existe\n");
+				printf("Ingrese nuevamente matricula del avion a modificar:\n");
+				getString(auxMatricula, 10);
+			}
 			auxIndex = findAvionByMatricula(aviones, QTY_AVIONES, auxMatricula);
-			if(auxIndex>=0 && modificarAvion(aviones, QTY_AVIONES, auxIndex)==1)
-				printf("Modificacion realizada con exito. \n");
+			modificarAvion(aviones, QTY_AVIONES, auxIndex);
 			break;
 		case 3:
+			mostrarAviones(aviones, QTY_AVIONES, marcas, QTY_MARCAS, viajes, QTY_VIAJES);
 			printf("Ingrese matricula del avion a eliminar:");
 			getString(auxMatricula, 10);
+			while(findAvionByMatricula(aviones, QTY_AVIONES, auxMatricula)==-2)
+			{
+				printf("\nLa matricula ingresada no existe\n");
+				printf("Ingrese nuevamente matricula del avion a modificar:\n");
+				getString(auxMatricula, 10);
+			}
 			auxIndex = findAvionByMatricula(aviones, QTY_AVIONES, auxMatricula);
 			if(auxIndex>=0 && bajaAvion(aviones, QTY_AVIONES, auxIndex)==1)
 				printf("El avion se elimino con exito. \n");
 			break;
 		case 4:
-			if(sortAvionesPorMatricula(aviones, QTY_AVIONES, marcas)==0)
+			if(sortAvionesPorMatriculayMarca(aviones, QTY_AVIONES, marcas, QTY_MARCAS)==0)
 			{
 				mostrarAviones(aviones, QTY_AVIONES, marcas, QTY_MARCAS, viajes, QTY_VIAJES);
 			}
-
 			break;
 		case 5:
-			mostrarMarcas(marcas, QTY_MARCAS);
+			mostrarViajes(viajes, QTY_VIAJES);
 			break;
 		case 6:
-			mostrarViajes(viajes, QTY_VIAJES);
+			mostrarMarcas(marcas, QTY_MARCAS);
+			break;
+		case 7:
+			mostrarAvionesBoening(aviones, QTY_AVIONES, marcas, QTY_MARCAS, viajes, QTY_VIAJES);
+			break;
+		case 8:
+			mostrarAvionMarcaSelec(aviones, QTY_AVIONES, marcas, QTY_MARCAS, viajes, QTY_VIAJES);
+			break;
+		case 9:
+			mostrarAvionesNeuquen(aviones, QTY_AVIONES, marcas, QTY_MARCAS, viajes, QTY_VIAJES);
+			break;
+		case 10:
+
+			break;
+		case 11:
+			informarAsientosModeloSelec(aviones, QTY_AVIONES, marcas, QTY_MARCAS, viajes, QTY_VIAJES);
 			break;
 		}
 		opcion = menu();
-	}while(opcion<7);
+
+	}while(opcion<12);
 
 
 	return EXIT_SUCCESS;
